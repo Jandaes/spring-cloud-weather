@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.weather.spring.cloud.config.WeatherApiConfig;
 import com.weather.spring.cloud.service.WeatherService;
 import com.weather.spring.cloud.vo.WeatherVo;
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class WeatherServiceImpl implements WeatherService {
             /*http请求*/
             ResponseEntity<String> respString = restTemplate.getForEntity(url,String.class);
             //返回状态码
-            if(respString.getStatusCodeValue() == 200){
+            if(respString.getStatusCodeValue() == HttpStatus.SC_OK){
                 strBody =respString.getBody();
             }else{
                 strBody = "数据请求错误";
