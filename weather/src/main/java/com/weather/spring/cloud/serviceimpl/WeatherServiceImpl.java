@@ -67,7 +67,7 @@ public class WeatherServiceImpl implements WeatherService {
                 strBody = "数据请求错误";
             }
             /*写入数据至缓存、25分钟过期*/
-            ops.set(key,strBody,25, TimeUnit.SECONDS);
+            ops.set(key,strBody,25, TimeUnit.MINUTES);
         }
         /*Json 解析*/
         ObjectMapper mapper = new ObjectMapper();
