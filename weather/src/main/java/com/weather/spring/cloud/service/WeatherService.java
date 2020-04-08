@@ -12,8 +12,9 @@ public interface WeatherService {
 
     /**
      * 获取实况天气
+     * @param requestIP 用户ip
      * @return
      */
-    WeatherVo getRealTimeWeatherData();
+    WeatherVo getRealTimeWeatherData(String requestIP);
 
 }

@@ -39,9 +39,9 @@ public class WeatherServiceImpl implements WeatherService {
      * @return
      */
     @Override
-    public WeatherVo getRealTimeWeatherData() {
+    public WeatherVo getRealTimeWeatherData(String requestIP) {
         /*Redis*/
-        String key = "v61";
+        String key = "v61-"+requestIP;
         /*返回数据主体*/
         String strBody = null;
 
