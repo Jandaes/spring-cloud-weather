@@ -1,10 +1,9 @@
 package com.weather.spring.cloud.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.client.RestTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  * @Author: Ant
@@ -12,15 +11,7 @@ import java.util.Map;
  * @Description:
  */
 public class HttpClientWeather {
-
-    @Autowired
-    private RestTemplate restTemplate;
-
-    public void doGet(String url, String response) {
-    }
-
-    public void doPost(String url, Map<String, String> requestParameter) {
-    }
+    private static Logger logger = LoggerFactory.getLogger(HttpClientWeather.class);
 
     /**
      * 从request中获取请求方IP
@@ -30,33 +21,39 @@ public class HttpClientWeather {
      * @return
      */
     public static String getIPAddress(HttpServletRequest request) {
-        String ip = null;
+        String unknown = "unknown";
         //X-Forwarded-For：Squid 服务代理
         String ipAddresses = request.getHeader("X-Forwarded-For");
-        if (ipAddresses == null || ipAddresses.length() == 0 || "unknown".equalsIgnoreCase(ipAddresses)) {
+        if (ipAddresses == null || ipAddresses.length() == 0 || unknown.equalsIgnoreCase(ipAddresses)) {
             //Proxy-Client-IP：apache 服务代理
             ipAddresses = request.getHeader("Proxy-Client-IP");
         }
-        if (ipAddresses == null || ipAddresses.length() == 0 || "unknown".equalsIgnoreCase(ipAddresses)) {
+        if (ipAddresses == null || ipAddresses.length() == 0 || unknown.equalsIgnoreCase(ipAddresses)) {
             //WL-Proxy-Client-IP：weblogic 服务代理
             ipAddresses = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (ipAddresses == null || ipAddresses.length() == 0 || "unknown".equalsIgnoreCase(ipAddresses)) {
+        if (ipAddresses == null || ipAddresses.length() == 0 || unknown.equalsIgnoreCase(ipAddresses)) {
             //HTTP_CLIENT_IP：有些代理服务器
             ipAddresses = request.getHeader("HTTP_CLIENT_IP");
         }
-        if (ipAddresses == null || ipAddresses.length() == 0 || "unknown".equalsIgnoreCase(ipAddresses)) {
+        if (ipAddresses == null || ipAddresses.length() == 0 || unknown.equalsIgnoreCase(ipAddresses)) {
             //X-Real-IP：nginx服务代理
             ipAddresses = request.getHeader("X-Real-IP");
         }
         //有些网络通过多层代理，那么获取到的ip就会有多个，一般都是通过逗号（,）分割开来，并且第一个ip为客户端的真实IP
         if (ipAddresses != null && ipAddresses.length() != 0) {
-            ip = ipAddresses.split(",")[0];
+            ipAddresses = ipAddresses.split(",")[0];
+        }
+        if (ipAddresses == null || ipAddresses.length() == 0 || unknown.equalsIgnoreCase(ipAddresses)) {
+            ipAddresses = request.getHeader("HTTP_X_FORWARDED_FOR");
         }
         //还是不能获取到，最后再通过request.getRemoteAddr();获取
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ipAddresses)) {
-            ip = request.getRemoteAddr();
+        if (ipAddresses == null || ipAddresses.length() == 0 || unknown.equalsIgnoreCase(ipAddresses)) {
+            ipAddresses = request.getRemoteAddr();
         }
-        return ip.equals("0:0:0:0:0:0:0:1")?"127.0.0.1":ip;
+        if (logger.isInfoEnabled()) {
+            logger.info("HttpServletRequest - String ip=[" + ipAddresses+"]");
+        }
+        return ipAddresses.equals("0:0:0:0:0:0:0:1")?"127.0.0.1":ipAddresses;
     }
 }
