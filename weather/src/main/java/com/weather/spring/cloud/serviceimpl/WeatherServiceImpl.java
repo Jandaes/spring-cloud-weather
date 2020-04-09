@@ -57,7 +57,7 @@ public class WeatherServiceImpl implements WeatherService {
         }else {
             logger.info("Redis don`t has Data");
             /*请求地址*/
-            String url = "https://tianqiapi.com/api?version=v61&appid="+ WeatherApiConfig.APPID +"&appsecret="+ WeatherApiConfig.APPSECRET;
+            String url = "https://tianqiapi.com/api?version=v61&appid="+ WeatherApiConfig.APPID +"&appsecret="+ WeatherApiConfig.APPSECRET+"&ip="+requestIP;
             /*http请求*/
             ResponseEntity<String> respString = restTemplate.getForEntity(url,String.class);
             //返回状态码
