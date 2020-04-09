@@ -17,4 +17,18 @@ public interface WeatherService {
      */
     WeatherVo getRealTimeWeatherData(String requestIP);
 
+    /**
+     * 通过城市编号获取实况天气
+     * @param cityId 城市编号
+     * @return
+     */
+    WeatherVo getRealTimeWeatherDataByCityId(String cityId);
+
+    /**
+     * 通过城市名称获取实况天气
+     * @param cityName 城市名称
+     * @return
+     */
+    WeatherVo getRealTimeWeatherDataByCityName(String cityName);
+
 }
